@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - SPMS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="notification-area" class="notification-container"></div>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand"><span>SPMS</div>
+            <nav class="nav-links">
+                <a class="nav-link active" id="nav-dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+                <a class="nav-link" id="nav-new-request"><i class="fas fa-plus-circle"></i> <span>New Request</span></a>
+                <a class="nav-link" id="nav-orders"><i class="fas fa-shopping-bag"></i> <span>My Orders</span></a>
+            </nav>
+            <div class="nav-links" style="justify-content: flex-end;">
+                <a class="nav-link" id="logout-btn" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h2>Customer Portal</h2>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <div id="user-name" style="font-weight: 600;">Loading...</div>
+                        <div id="user-role" style="font-size: 0.8rem; color: var(--text-secondary);">Customer</div>
+                    </div>
+                    <div class="avatar" id="user-avatar">?</div>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="glass-panel" style="padding: 1.5rem;">
+                <h3 class="mb-4">My Procurement Requests</h3>
+                <div class="data-table-container">
+                    <table class="data-table" id="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Quantity</th>
+                                <th>Budget</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requests-body">
+                            <tr><td colspan="6" class="text-center">Loading requests...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- New Request View -->
+            <div id="view-new-request" class="glass-panel hidden" style="padding: 2rem; max-width: 800px; margin: 0 auto; width: 100%;">
+                <h3 class="mb-4">Create Purchase Request</h3>
+                <form id="form-create-request">
+                    <div class="form-group">
+                        <label>Item Name</label>
+                        <input type="text" id="req-item" class="form-control" required>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Quantity</label>
+                            <input type="number" id="req-qty" class="form-control" min="1" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Budget (USD)</label>
+                            <input type="number" id="req-budget" class="form-control" min="1" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description & Requirements</label>
+                        <textarea id="req-desc" class="form-control" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Request</button>
+                </form>
+            </div>
+
+            <!-- Orders View -->
+            <div id="view-orders" class="glass-panel hidden" style="padding: 1.5rem;">
+                <h3 class="mb-4">My Orders</h3>
+                <div class="data-table-container">
+                    <table class="data-table" id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Seller</th>
+                                <th>Price</th>
+                                <th>Order Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-body">
+                            <tr><td colspan="6" class="text-center">Loading orders...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payment View -->
+            <div id="view-payment" class="glass-panel hidden" style="padding: 2rem; max-width: 600px; margin: 0 auto; width: 100%;">
+                <h3 class="mb-4">Complete Your Payment</h3>
+                <div id="payment-summary" style="background: rgba(0,0,0,0.02); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+                    <!-- populated via js -->
+                </div>
+                <form id="form-payment">
+                    <div class="form-group">
+                        <label>Cardholder Name</label>
+                        <input type="text" id="pay-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" id="pay-card" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Expiry Date</label>
+                            <input type="text" id="pay-expiry" class="form-control" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>CVV</label>
+                            <input type="text" id="pay-cvv" class="form-control" placeholder="123" maxlength="4" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Or Pay via UPI</label>
+                        <input type="text" id="pay-upi" class="form-control" placeholder="username@upi">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-lock"></i> Pay Now</button>
+                    <button type="button" class="btn btn-outline mt-2" style="width: 100%;" onclick="document.getElementById('nav-dashboard').click()">Cancel</button>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Quotations Modal -->
+    <div class="modal-overlay" id="modal-quotes">
+        <div class="glass-panel modal-content" style="padding: 1.5rem; max-width: 700px;">
+            <div class="modal-header">
+                <h3>Received Quotations</h3>
+                <button class="modal-close" onclick="closeModal('modal-quotes')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Seller</th>
+                            <th>Price</th>
+                            <th>Delivery</th>
+                            <th>Proposal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quotes-body">
+                        <!-- populated via js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Track Order Modal -->
+    <div class="modal-overlay" id="modal-track">
+        <div class="glass-panel modal-content" style="padding: 2rem;">
+            <div class="modal-header">
+                <h3>Track Order</h3>
+                <button class="modal-close" onclick="closeModal('modal-track')"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="track-details" class="mb-4" style="background: rgba(0,0,0,0.05); padding: 1rem; border-radius: var(--radius-md);">
+                <!-- details -->
+            </div>
+            <div style="display: flex; justify-content: space-between; position: relative; margin-top: 2rem;">
+                <div style="position: absolute; top: 15px; left: 10%; right: 10%; height: 4px; background: #e2e8f0; z-index: 1;"></div>
+                <div id="track-progress" style="position: absolute; top: 15px; left: 10%; width: 0%; height: 4px; background: var(--success); z-index: 2; transition: width 0.5s;"></div>
+                
+                <div style="text-align: center; z-index: 3; position: relative; flex: 1;">
+                    <div id="track-step-1" style="width: 34px; height: 34px; background: #e2e8f0; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">1</div>
+                    <div style="margin-top: 10px; font-size: 0.8rem; font-weight: 600;">Pending</div>
+                </div>
+                <div style="text-align: center; z-index: 3; position: relative; flex: 1;">
+                    <div id="track-step-2" style="width: 34px; height: 34px; background: #e2e8f0; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">2</div>
+                    <div style="margin-top: 10px; font-size: 0.8rem; font-weight: 600;">In Progress</div>
+                </div>
+                <div style="text-align: center; z-index: 3; position: relative; flex: 1;">
+                    <div id="track-step-3" style="width: 34px; height: 34px; background: #e2e8f0; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">3</div>
+                    <div style="margin-top: 10px; font-size: 0.8rem; font-weight: 600;">Completed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/customer.js"></script>
+</body>
+</html>

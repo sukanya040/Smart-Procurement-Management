@@ -1,0 +1,60 @@
+-- Database schema for SPMS
+CREATE DATABASE IF NOT EXISTS spms;
+USE spms;
+
+CREATE TABLE IF NOT EXISTS Users (
+    User_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Role ENUM('Customer', 'Seller', 'Admin') NOT NULL,
+    Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Requests (
+    Request_ID INT AUTO_INCREMENT PRIMARY KEY,
+    User_ID INT NOT NULL,
+    Item_Name VARCHAR(255) NOT NULL,
+    Quantity INT NOT NULL,
+    Budget DECIMAL(10,2) NOT NULL,
+    Description TEXT,
+    Status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (User_ID) REFERENCES Users(User_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Quotations (
+    Quote_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Request_ID INT NOT NULL,
+    Seller_ID INT NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
+    Delivery_Time VARCHAR(100),
+    Proposal TEXT,
+    Status ENUM('Pending', 'Accepted', 'Rejected') DEFAULT 'Pending',
+    Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (Request_ID) REFERENCES Requests(Request_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Seller_ID) REFERENCES Users(User_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Orders (
+    Order_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Request_ID INT NOT NULL,
+    Quote_ID INT NOT NULL,
+    Seller_ID INT NOT NULL,
+    Order_Status ENUM('Pending', 'In Progress', 'Completed') DEFAULT 'Pending',
+    Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (Request_ID) REFERENCES Requests(Request_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Quote_ID) REFERENCES Quotations(Quote_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Seller_ID) REFERENCES Users(User_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Payments (
+    Payment_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Request_ID INT NOT NULL,
+    Quote_ID INT NOT NULL,
+    Amount DECIMAL(10,2) NOT NULL,
+    Payment_Status ENUM('Success', 'Failed') DEFAULT 'Success',
+    Payment_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (Request_ID) REFERENCES Requests(Request_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Quote_ID) REFERENCES Quotations(Quote_ID) ON DELETE CASCADE
+);

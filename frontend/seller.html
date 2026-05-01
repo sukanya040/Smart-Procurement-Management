@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - SPMS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="notification-area" class="notification-container"></div>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand"><span>SPMS</div>
+            <nav class="nav-links">
+                <a class="nav-link active" id="nav-dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+                <a class="nav-link" id="nav-bids"><i class="fas fa-gavel"></i> <span>Available Requests</span></a>
+                <a class="nav-link" id="nav-orders"><i class="fas fa-shipping-fast"></i> <span>My Orders</span></a>
+            </nav>
+            <div class="nav-links" style="justify-content: flex-end;">
+                <a class="nav-link" id="logout-btn" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h2>Seller Portal</h2>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <div id="user-name" style="font-weight: 600;">Loading...</div>
+                        <div id="user-role" style="font-size: 0.8rem; color: var(--text-secondary);">Seller</div>
+                    </div>
+                    <div class="avatar" id="user-avatar">S</div>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="glass-panel" style="padding: 1.5rem; margin: 1.5rem;">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-envelope-open-text"></i></div>
+                        <div>
+                            <div class="stat-value" id="stat-requests">0</div>
+                            <div class="stat-label">Available Requests</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #dcfce7; color: #15803d;"><i class="fas fa-truck-loading"></i></div>
+                        <div>
+                            <div class="stat-value" id="stat-orders">0</div>
+                            <div class="stat-label">Active Orders</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bids View -->
+            <div id="view-bids" class="glass-panel hidden" style="padding: 1.5rem; margin: 1.5rem;">
+                <h3 class="mb-4">Available Procurement Requests</h3>
+                <div class="data-table-container">
+                    <table class="data-table" id="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Customer Budget</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requests-body">
+                            <tr><td colspan="5" class="text-center">Loading requests...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Orders View -->
+            <div id="view-orders" class="glass-panel hidden" style="padding: 1.5rem; margin: 1.5rem;">
+                <h3 class="mb-4">My Orders</h3>
+                <div class="data-table-container">
+                    <table class="data-table" id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Customer</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Update Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-body">
+                            <tr><td colspan="5" class="text-center">Loading orders...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Quote Modal -->
+    <div class="modal-overlay" id="modal-quote">
+        <div class="glass-panel modal-content" style="padding: 2rem;">
+            <div class="modal-header">
+                <h3>Submit Quotation</h3>
+                <button class="modal-close" onclick="closeModal('modal-quote')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="form-submit-quote">
+                <input type="hidden" id="quote-req-id">
+                <div class="form-group">
+                    <label>Your Price (USD)</label>
+                    <input type="number" id="quote-price" class="form-control" step="0.01" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Time</label>
+                    <input type="text" id="quote-delivery" class="form-control" placeholder="e.g. 5 Days" required>
+                </div>
+                <div class="form-group">
+                    <label>Proposal Notes</label>
+                    <textarea id="quote-proposal" class="form-control" rows="3" placeholder="Additional details..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Quotation</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/seller.js"></script>
+</body>
+</html>

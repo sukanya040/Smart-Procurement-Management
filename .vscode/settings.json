@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd \"c:\\\\Progams\\\\\\.vscode\\\\procurement management\" ; node -e \"const mysql = require\\('mysql2/promise'\\); const pool = mysql\\.createPool\\(\\{ host: 'localhost', user: 'root', password: 'JAI@_laksn9', database: 'spms', waitForConnections: true, connectionLimit: 10, queueLimit: 0 \\}\\); pool\\.getConnection\\(\\)\\.then\\(conn => \\{ conn\\.query\\('SELECT COUNT\\(\\*\\) as count FROM Users'\\)\\.then\\(\\(\\[rows\\]\\) => \\{ console\\.log\\('Users in database:', rows\\[0\\]\\.count\\); conn\\.release\\(\\); process\\.exit\\(0\\); \\}\\); \\}\\)\\.catch\\(err => \\{ console\\.error\\('DB Error:', err\\.message\\); process\\.exit\\(1\\); \\}\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
